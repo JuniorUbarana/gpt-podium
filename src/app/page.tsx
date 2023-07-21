@@ -1,21 +1,31 @@
 "use client"
 
-import Sidebar from "@/components/Sidebar";
+import { ChatArea } from "@/components/ChatArea";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { Chat } from "@/types/Chat";
 import { useState } from "react";
+import Sidebar from "@/components/Sidebar";
 
 const Page = () => {
 
+  const [AILoading, setAILoading] = useState(false);
+  const [chatList, setChatList] = useState();
+  const [chatActive, setChatActive] = useState<Chat>();
   const [sidebarOpened, setSidebarOpened] = useState(false);
 
-  const closeSidebar = () => {
-    setSidebarOpened(false);
-  };
+  const openSidebar = () => setSidebarOpened(true);
+  const closeSidebar = () => setSidebarOpened(false);
 
   const handleClearConversations = () => {
 
   }
 
   const handleNewChat = () => {
+    
+  }
+
+  const handleSendMessage = () => {
 
   }
 
@@ -27,15 +37,22 @@ const Page = () => {
         onClear={handleClearConversations}
         onNewChat={handleNewChat}
       >
-        <div className="w-16 h-96 bg-red-200 mb-2">...</div>
-        <div className="w-16 h-96 bg-red-200 mb-2">...</div>
-        <div className="w-16 h-96 bg-red-200 mb-2">...</div>
-        <div className="w-16 h-96 bg-red-200 mb-2">...</div>
-        <div className="w-16 h-96 bg-red-200 mb-2">...</div>
-        <div className="w-16 h-96 bg-red-200 mb-2">...</div>
+        ...
       </Sidebar>
       <section className="flex flex-col w-full">
-        <button onClick={() => setSidebarOpened(true)} className="md:hidden">Abrir Sidebar</button>
+        <Header
+          openSidebarClick={openSidebar}
+          title={`Bla bla bla`}
+          newChatClick={handleNewChat}
+        />
+
+        <ChatArea chat={chatActive} />
+
+        <Footer 
+          onSendMessage={handleSendMessage}
+          disabled={AILoading}
+        />
+
       </section>
     </main>
   )
