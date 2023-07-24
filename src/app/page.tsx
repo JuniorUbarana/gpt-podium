@@ -20,8 +20,29 @@ const Page = () => {
     setChatActive(chatList.find(item => item.id === chatActiveId));
   }, [chatActiveId, chatList]);
 
+  useEffect(() => {
+    if(AILoading) getAIResponse();
+  }, [AILoading]);
+
   const openSidebar = () => setSidebarOpened(true);
   const closeSidebar = () => setSidebarOpened(false);
+
+  const getAIResponse = () => {
+    setTimeout(() => {
+      let chatListClone = [...chatList];
+      let chatIndex = chatListClone.findIndex(item => item.id === chatActiveId);
+      if(chatIndex > -1) {
+        chatListClone[chatIndex].messages.push({
+          id: uuidv4(), 
+          author: 'ai', 
+          body: 'Aqui está a resposta da AI :) '
+        });
+        setChatList(chatListClone);
+      }
+      setChatList(chatListClone);
+      setAILoading(false);
+    }, 2000)
+  };
 
   const handleClearConversations = () => {
     if(AILoading) return;
@@ -52,8 +73,17 @@ const Page = () => {
       setChatActiveId(newChatId);
     } else {
       //Updating existing chat
-      
+      let chatListClone = [...chatList];
+      let chatIndex = chatListClone.findIndex(item => item.id === chatActiveId);
+      chatListClone[chatIndex].messages.push({
+        id: uuidv4(), 
+        author: 'me', 
+        body: message
+      });
+      setChatList(chatListClone);
     }
+
+    setAILoading(true);
   }
 
   return (
@@ -73,7 +103,7 @@ const Page = () => {
           newChatClick={handleNewChat}
         />
 
-        <ChatArea chat={chatActive} />
+        <ChatArea chat={chatActive} loading={AILoading} />
 
         <Footer 
           onSendMessage={handleSendMessage}
